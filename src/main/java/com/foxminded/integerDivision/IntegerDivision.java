@@ -130,9 +130,6 @@ public class IntegerDivision {
         if(modulo.equals("0") && !subtrahend.equals("0")) {
             result += subtrahend.length();
         }
-        if (!modulo.equals("0") && subtrahend.equals("0") ) {
-            result -= part.length();
-        }
         if (!modulo.equals("0") && !subtrahend.equals("0")) {
             result += part.length() - modulo.length();
         }
