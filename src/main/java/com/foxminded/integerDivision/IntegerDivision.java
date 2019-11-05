@@ -9,37 +9,37 @@ public class IntegerDivision {
         StringBuilder result = new StringBuilder();
         String dividendString = Integer.toString(dividend);
         String modulo = "";
-        int printPosition = 0;
+        int printPosition = 1;
         int numberPosition = 0;
         
         for (int i = 0; numberPosition <= dividendString.length() - 1; i++) {
             String part = calculatePart(dividendString, divider, modulo, numberPosition);
-            String subtrahend = calculateSubtrahend(part,divider);        
+            String subtrahend = calculateSubtrahend(part, divider);        
             modulo = Integer.toString(Integer.parseInt(part) - Integer.parseInt(subtrahend));
             
             result.append(addDividendLine(i, printPosition, dividend, divider, part));
             result.append(addSubtrahendLine(i, printPosition, dividend, divider, part, subtrahend));
             result.append(addSubLine(i, printPosition, dividend, divider, part, subtrahend));   
             numberPosition += calculateNumberPosition(i, part);
-            printPosition += calculatePrintPosition(part,subtrahend,modulo);
-               
+            
             if (numberPosition >= dividendString.length()) {
                 result.append(addLastLine(printPosition, part, subtrahend, modulo));
             }
+            printPosition += calculatePrintPosition(part,subtrahend,modulo);
         }
         System.out.print(result.toString());
     }
     
     private String calculatePart(String dividend, int divider, String modulo, int numberPosition) {
         String result = "0"; 
-        int nextNumberPosition = 1;
+        int nextNumberPosition = numberPosition + 1;
         if (numberPosition == 0) {
             while(nextNumberPosition <= dividend.length() && Integer.parseInt(result) < divider) {
-                    result = dividend.substring(numberPosition,nextNumberPosition);
+                result = dividend.substring(numberPosition,nextNumberPosition);
                 nextNumberPosition++;
             }
         } else {
-                result = dividend.substring(numberPosition,numberPosition+1);
+                result = dividend.substring(numberPosition, nextNumberPosition);
                 if (!modulo.equals("0")) {
                 result = modulo + dividend.substring(numberPosition,nextNumberPosition);
             }
@@ -52,7 +52,7 @@ public class IntegerDivision {
         if (i == 0) {
             result.append("_" + dividend + "|" + divider + "\n");
         } else {
-            result.append(addSpaces(printPosition));
+            result.append(addSpaces(printPosition - 1));
             result.append("_" + part + "\n");
         }
         return result.toString();
@@ -60,7 +60,7 @@ public class IntegerDivision {
     
     private String addSubtrahendLine(int i, int printPosition, int dividend, int divider, String part, String subtrahend) {
         StringBuffer result = new StringBuffer();
-        printPosition += part.length() - subtrahend.length() + 1;
+        printPosition += part.length() - subtrahend.length();
         result.append(addSpaces(printPosition));
         result.append(subtrahend);
         if ( i == 0) {
@@ -121,10 +121,13 @@ public class IntegerDivision {
             result++;
         }
         if(modulo.equals("0") && !subtrahend.equals("0")) {
-            result += subtrahend.length() - 1;
+            result += subtrahend.length();
         }
-        if (subtrahend.equals("0") ) {
+        if (!modulo.equals("0") && subtrahend.equals("0") ) {
             result -= part.length();
+        }
+        if (!modulo.equals("0") && !subtrahend.equals("0")) {
+            result += part.length() - modulo.length();
         }
         return result;
     }
