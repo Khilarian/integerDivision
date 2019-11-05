@@ -11,6 +11,13 @@ public class IntegerDivision {
         String modulo = "";
         int printPosition = 1;
         int numberPosition = 0;
+        int printCorrection = 0;
+        
+        if (dividendString.charAt(0) == '-') {
+            dividendString = dividendString.substring(1);
+            printPosition++;
+            printCorrection--;
+        }
         
         for (int i = 0; numberPosition <= dividendString.length() - 1; i++) {
             String part = calculatePart(dividendString, divider, modulo, numberPosition);
@@ -18,8 +25,8 @@ public class IntegerDivision {
             modulo = Integer.toString(Integer.parseInt(part) - Integer.parseInt(subtrahend));
             
             result.append(addDividendLine(i, printPosition, dividend, divider, part));
-            result.append(addSubtrahendLine(i, printPosition, dividend, divider, part, subtrahend));
-            result.append(addSubLine(i, printPosition, dividend, divider, part, subtrahend));   
+            result.append(addSubtrahendLine(i, printPosition, printCorrection, dividend, divider, part, subtrahend));
+            result.append(addSubLine(i, printPosition, printCorrection, dividend, divider, part, subtrahend));   
             numberPosition += calculateNumberPosition(i, part);
             
             if (numberPosition >= dividendString.length()) {
@@ -34,7 +41,7 @@ public class IntegerDivision {
         String result = "0"; 
         int nextNumberPosition = numberPosition + 1;
         if (numberPosition == 0) {
-            while(nextNumberPosition <= dividend.length() && Integer.parseInt(result) < divider) {
+            while(nextNumberPosition <= dividend.length() && Integer.parseInt(result) < Math.abs(divider)) {
                 result = dividend.substring(numberPosition,nextNumberPosition);
                 nextNumberPosition++;
             }
@@ -58,26 +65,26 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private String addSubtrahendLine(int i, int printPosition, int dividend, int divider, String part, String subtrahend) {
+    private String addSubtrahendLine(int i, int printPosition, int printCorrection, int dividend, int divider, String part, String subtrahend) {
         StringBuffer result = new StringBuffer();
         printPosition += part.length() - subtrahend.length();
         result.append(addSpaces(printPosition));
         result.append(subtrahend);
         if ( i == 0) {
-            result.append(addSpaces(Integer.toString(dividend).length() - part.length()));
+            result.append(addSpaces(Integer.toString(dividend).length() - part.length() + printCorrection));
             result.append("|");
-            result.append(addLine(Integer.toString(dividend/divider)));
+            result.append(addLine(Math.max(Integer.toString(dividend/divider).length(), Integer.toString(divider).length())));
         }
         result.append("\n");
         return result.toString();
     }
     
-    private String addSubLine(int i, int printPosition, int dividend, int divider, String part, String subtrahend) {
+    private String addSubLine(int i, int printPosition, int printCorrection, int dividend, int divider, String part, String subtrahend) {
         StringBuffer result = new StringBuffer();
         result.append(addSpaces(printPosition + subtrahend.length() - part.length()));
-        result.append(addLine(part));
+        result.append(addLine(part.length()));
         if ( i == 0) {
-            result.append(addSpaces(Integer.toString(dividend).length() - part.length()));
+            result.append(addSpaces(Integer.toString(dividend).length() - part.length() + printCorrection));
             result.append("|");
             result.append(dividend / divider);
         }
@@ -97,9 +104,9 @@ public class IntegerDivision {
         return Integer.toString(Integer.parseInt(dividend) / divider * divider);
     }
     
-    private char[] addLine(String divider) {
-        char[] result = new char[divider.length()];
-        for (int i = 0; i < divider.length(); i++) {
+    private char[] addLine(int length) {
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
             result[i] = '-';
         }
         return result;
