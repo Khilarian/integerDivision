@@ -88,6 +88,17 @@ class IntegerDivisionTest {
     } 
     
     @Test
+    void drawDivisionReturnZeroWithRemainderOfDivisionWhenDividerGreaterThanDivided() {
+        IntegerDivision id = new IntegerDivision(4,128);
+        String expected = "_4|128\n"
+                +         " 0|---\n"
+                +         " -|0\n"
+                +         " 4";
+        String actual = id.drawDivision();
+        assertEquals(expected, actual);
+    } 
+    
+    @Test
     void drawDivisionReturnLotsOfSameNumeralIfDividedContainsOfLotsSameNumeralAndDividedIsOneNumeralThatHaveCommonFactor() {
         IntegerDivision id = new IntegerDivision(999,3);
         String expected = "_999|3\n"
