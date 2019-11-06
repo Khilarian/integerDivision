@@ -67,7 +67,7 @@ public class IntegerDivision {
         if (i == 0) {
             result.append("_" + dividend + "|" + divider + "\n");
         } else {
-            result.append(addSpaces(printPosition - 1));
+            result.append(addLineOfChars(printPosition - 1, ' '));
             result.append("_" + part + "\n");
         }
         return result.toString();
@@ -76,12 +76,12 @@ public class IntegerDivision {
     private String addSubtrahendLine(int i, int printPosition, String part, String subtrahend) {
         StringBuilder result = new StringBuilder();
         printPosition += part.length() - subtrahend.length();
-        result.append(addSpaces(printPosition));
+        result.append(addLineOfChars(printPosition, ' '));
         result.append(subtrahend);
         if ( i == 0) {
-            result.append(addSpaces(Integer.toString(Math.abs(dividend)).length() - part.length()));
+            result.append(addLineOfChars(Integer.toString(Math.abs(dividend)).length() - part.length(), ' '));
             result.append("|");
-            result.append(addLine(Math.max(Integer.toString(dividend/divider).length(), Integer.toString(divider).length())));
+            result.append(addLineOfChars(Math.max(Integer.toString(dividend/divider).length(), Integer.toString(divider).length()), '-'));
         }
         result.append("\n");
         return result.toString();
@@ -89,10 +89,10 @@ public class IntegerDivision {
     
     private String addSubLine(int i, int printPosition, String part, String subtrahend) {
         StringBuilder result = new StringBuilder();
-        result.append(addSpaces(printPosition));
-        result.append(addLine(part.length()));
+        result.append(addLineOfChars(printPosition, ' '));
+        result.append(addLineOfChars(part.length(), '-'));
         if ( i == 0) {
-            result.append(addSpaces(Integer.toString(Math.abs(dividend)).length() - part.length()));
+            result.append(addLineOfChars(Integer.toString(Math.abs(dividend)).length() - part.length(), ' '));
             result.append("|");
             result.append(dividend / divider);
         }
@@ -100,22 +100,30 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private char[] addSpaces(int printPosition) {
+    private String calculateSubtrahend(String part) {
+        return Integer.toString(Math.abs(Integer.parseInt(part)) / divider * divider);
+    }   
+    
+    /*private char[] addSpaces(int printPosition) {
         char[] spaces = new char[printPosition];
         for (int i = 0; i < printPosition; i++) {
             spaces[i] = ' ';
         }
         return spaces;
     }
-    
-    private String calculateSubtrahend(String part) {
-        return Integer.toString(Math.abs(Integer.parseInt(part)) / divider * divider);
-    }
-    
+   
     private char[] addLine(int length) {
         char[] result = new char[length];
         for (int i = 0; i < length; i++) {
             result[i] = '-';
+        }
+        return result;
+    }
+    */
+    private char[] addLineOfChars(int length, char symbol) {
+        char[] result = new char[length];
+        for (int i = 0; i < length; i++) {
+            result[i] = symbol;
         }
         return result;
     }
@@ -149,7 +157,7 @@ public class IntegerDivision {
     
     private String addLastLine(int printPosition, String part, String subtrahend, String modulo) {
         StringBuilder result = new StringBuilder();
-        result.append(addSpaces(printPosition + part.length() - Integer.toString(Integer.parseInt(part)-Integer.parseInt(subtrahend)).length()));
+        result.append(addLineOfChars(printPosition + part.length() - Integer.toString(Integer.parseInt(part)-Integer.parseInt(subtrahend)).length(), ' '));
         result.append(modulo);
         return result.toString();
     }
