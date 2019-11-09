@@ -29,7 +29,8 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private String createDividendLine(DivisionArguments arguments, LineCalculator lineCalculator, int iteration, int printPosition) {
+    private String createDividendLine(DivisionArguments arguments, LineCalculator lineCalculator, int iteration,
+            int printPosition) {
         StringBuilder result = new StringBuilder();
         if (iteration == 0) {
             result.append("_");
@@ -61,7 +62,8 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private String createSubLine(DivisionArguments arguments, LineCalculator lineCalculator, int iteration, int printPosition) {
+    private String createSubLine(DivisionArguments arguments, LineCalculator lineCalculator, int iteration,
+            int printPosition) {
         StringBuilder result = new StringBuilder();
         result.append(repeatChars(' ', printPosition));
         result.append(repeatChars('-', getLength(lineCalculator.dividendPart)));
@@ -108,7 +110,8 @@ public class IntegerDivision {
     
     private String createLastLine(LineCalculator lineCalculator, int printPosition) {
         StringBuilder result = new StringBuilder();
-        result.append(repeatChars(' ', printPosition + getLength(lineCalculator.dividendPart) - getLength(lineCalculator.modulo)));
+        result.append(repeatChars(' ',
+                printPosition + getLength(lineCalculator.dividendPart) - getLength(lineCalculator.modulo)));
         result.append(lineCalculator.modulo);
         return result.toString();
     }

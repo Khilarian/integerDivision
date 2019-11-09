@@ -4,7 +4,6 @@ public class DivisionArguments {
     int dividend;
     int divider;
     int quotient;
-
     
     public DivisionArguments(int dividend, int divider) {
         this.dividend = dividend;
