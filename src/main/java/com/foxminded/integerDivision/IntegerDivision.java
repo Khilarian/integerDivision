@@ -2,14 +2,10 @@ package com.foxminded.integerDivision;
 
 public class IntegerDivision {
     
-    public IntegerDivision() {
-    }
-    
     public String drawDivision(int dividend, int divider) {
         if (divider == 0) {
             throw new IllegalArgumentException("divider can't be zero.");
         }
-        StringBuilder result = new StringBuilder();
         DivisionArguments arguments = new DivisionArguments(dividend, divider);
         LineCalculator lineCalculator = new LineCalculator();
         int printPosition = 1;
@@ -20,7 +16,7 @@ public class IntegerDivision {
             result.append(createDividendLine(arguments, lineCalculator, i, printPosition));
             result.append(createSubtrahendLine(arguments, lineCalculator, i, printPosition));
             result.append(createSubLine(arguments, lineCalculator, i, printPosition));
-            numberPosition += calculateNumberPosition(i, lineCalculator);
+	    numberPosition += calculateNumberPosition(i, lineCalculator);
             if (numberPosition >= Integer.toString(dividend).length()) {
                 result.append(createLastLine(lineCalculator, printPosition));
             }
@@ -44,7 +40,7 @@ public class IntegerDivision {
             result.append(lineCalculator.dividendPart);
             result.append("\n");
         }
-        return result.toString();
+	return result.toString();
     }
     
     private String createSubtrahendLine(DivisionArguments arguments, LineCalculator lineCalculator, int iteration,
@@ -81,7 +77,7 @@ public class IntegerDivision {
         for (int i = 0; i < length; i++) {
             result[i] = symbol;
         }
-        return result;
+        return new String(result);
     }
     
     private int calculateNumberPosition(int iteration, LineCalculator lineCalculator) {
@@ -115,9 +111,4 @@ public class IntegerDivision {
         result.append(lineCalculator.modulo);
         return result.toString();
     }
-    
-    private int getLength(int number) {
-        return String.valueOf(number).length();
-    }
-    
 }
