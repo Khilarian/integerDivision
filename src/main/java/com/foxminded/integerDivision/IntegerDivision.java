@@ -6,6 +6,7 @@ public class IntegerDivision {
         if (divider == 0) {
             throw new IllegalArgumentException("divider can't be zero.");
         }
+        StringBuilder result = new StringBuilder();
         DivisionArguments arguments = new DivisionArguments(dividend, divider);
         LineCalculator lineCalculator = new LineCalculator();
         int printPosition = 1;
@@ -72,7 +73,7 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private char[] repeatChars(char symbol, int length) {
+    private String repeatChars(char symbol, int length) {
         char[] result = new char[length];
         for (int i = 0; i < length; i++) {
             result[i] = symbol;
@@ -110,5 +111,9 @@ public class IntegerDivision {
                 printPosition + getLength(lineCalculator.dividendPart) - getLength(lineCalculator.modulo)));
         result.append(lineCalculator.modulo);
         return result.toString();
+    }
+    
+    private int getLength(int number) {
+        return String.valueOf(number).length();
     }
 }
