@@ -1,67 +1,53 @@
 package com.foxminded.integerDivision;
 
 public class IntegerDivision {
-    private int dividend;
-    private int divider;
     
-    public IntegerDivision(int dividend, int divider) {
-        this.dividend = dividend;
-        this.divider = divider;
+    public IntegerDivision() {
     }
     
-    public String drawDivision() {
+    public String drawDivision(int dividend, int divider) {
         if (divider == 0) {
             throw new IllegalArgumentException("divider can't be zero.");
         }
         StringBuilder result = new StringBuilder();
-        String modulo = "";
+        int modulo = 0;
         int printPosition = 1;
         int numberPosition = 0;
         
-        if (dividend < 0) {
-            printPosition++;
-        }
-        
-        for (int i = 0; numberPosition <= Integer.toString(dividend).length() - 1; i++) {
-            String dividendPart = calculateDividendPart(modulo, numberPosition);
-            String subtrahend = calculateSubtrahend(dividendPart);
-            modulo = Integer.toString(Integer.parseInt(dividendPart) - Integer.parseInt(subtrahend));
-            result.append(createDividendLine(i, printPosition, dividendPart));
-            result.append(createSubtrahendLine(i, printPosition, dividendPart, subtrahend));
-            result.append(createSubLine(i, printPosition, dividendPart)); 
+        for (int i = 0; numberPosition <= getLength(dividend) - 1; i++) {
+            int dividendPart = calculateDividendPart(dividend, divider, modulo, numberPosition);
+            int subtrahend = calculateSubtrahend(divider, dividendPart);
+            modulo = dividendPart - subtrahend;
+            result.append(createDividendLine(dividend, divider, dividendPart, i, printPosition));
+            result.append(createSubtrahendLine(dividend, divider, dividendPart, subtrahend, i, printPosition));
+            result.append(createSubLine(dividend, divider, dividendPart, i, printPosition)); 
             numberPosition += calculateNumberPosition(i, dividendPart);
             if (numberPosition >= Integer.toString(dividend).length()) {
-                result.append(createLastLine(printPosition, dividendPart, subtrahend, modulo));
+                result.append(createLastLine(dividendPart, subtrahend, modulo, printPosition));
             }
             printPosition += calculatePrintPosition(dividendPart,subtrahend,modulo);
         }
         return result.toString();
     }
     
-    private String calculateDividendPart(String modulo, int startPosition) {
+    private int calculateDividendPart(int dividend, int divider, int modulo, int startPosition) {
         int endPosition = startPosition + 1;
-        String result = "0";
-        if (Integer.parseInt(Integer.toString(dividend)) < 0 && startPosition == 0) {
-            endPosition++;
-        }       
+        int result = 0;
         if (startPosition == 0) {
-            while(endPosition <= Integer.toString(dividend).length() && Math.abs(Integer.parseInt(result)) < Math.abs(divider)) {
-                result = Integer.toString(dividend).substring(startPosition,endPosition);
+            while(endPosition <= getLength(dividend) && result < divider) {
+                result = Integer.parseInt(String.valueOf(dividend).substring(startPosition,endPosition));
                 endPosition++;
             }
-        } else if (endPosition <= Integer.toString(dividend).length()){
-                result = Integer.toString(dividend).substring(startPosition, endPosition);
-                if (!modulo.equals("0")) {
-                result = modulo + result;
+        } else if (endPosition <= getLength(dividend)){
+                result = Integer.parseInt(String.valueOf(dividend).substring(startPosition,endPosition));
+                if (startPosition != 0 && modulo != 0) {
+                result = Integer.parseInt(String.valueOf(modulo) + String.valueOf(result));
             }
-        }
-        if (dividend < 0 && startPosition == 0) {
-            result = result.substring(1);
         }
         return result;
     }
     
-    private String createDividendLine(int iteration, int printPosition, String dividendPart) {
+    private String createDividendLine(int dividend, int divider, int dividendPart, int iteration, int printPosition) {
         StringBuilder result = new StringBuilder();
         if (iteration == 0) {
             result.append("_");
@@ -78,26 +64,26 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private String createSubtrahendLine(int iteration, int printPosition, String dividendPart, String subtrahend) {
+    private String createSubtrahendLine(int dividend, int divider, int dividendPart, int subtrahend, int iteration, int printPosition) {
         StringBuilder result = new StringBuilder();
-        printPosition += dividendPart.length() - subtrahend.length();
+        printPosition += getLength(dividendPart) - getLength(subtrahend);
         result.append(repeatChars(' ', printPosition));
         result.append(subtrahend);
         if ( iteration == 0) {
-            result.append(repeatChars(' ', Integer.toString(Math.abs(dividend)).length() - dividendPart.length()));
+            result.append(repeatChars(' ', getLength(dividend) - getLength(dividendPart)));
             result.append("|");
-            result.append(repeatChars('-', Math.max(Integer.toString(dividend/divider).length(), Integer.toString(divider).length())));
+            result.append(repeatChars('-', Math.max(getLength(dividend/divider), getLength(divider))));
         }
         result.append("\n");
         return result.toString();
     }
     
-    private String createSubLine(int iteration, int printPosition, String dividendPart) {
+    private String createSubLine(int dividend, int divider, int dividendPart, int iteration, int printPosition) {
         StringBuilder result = new StringBuilder();
         result.append(repeatChars(' ', printPosition));
-        result.append(repeatChars('-', dividendPart.length()));
+        result.append(repeatChars('-', getLength(dividendPart)));
         if ( iteration == 0) {
-            result.append(repeatChars(' ', Integer.toString(Math.abs(dividend)).length() - dividendPart.length()));
+            result.append(repeatChars(' ', getLength(dividend) - getLength(dividendPart)));
             result.append("|");
             result.append(dividend / divider);
         }
@@ -105,8 +91,8 @@ public class IntegerDivision {
         return result.toString();
     }
     
-    private String calculateSubtrahend(String dividendPart) {
-        return Integer.toString(Math.abs(Integer.parseInt(dividendPart)) / divider * divider);
+    private int calculateSubtrahend(int divider, int dividendPart) {
+        return dividendPart / divider * divider;
     }   
     
     private char[] repeatChars(char symbol, int length) {
@@ -117,37 +103,42 @@ public class IntegerDivision {
         return result;
     }
     
-    private int calculateNumberPosition(int iteration, String dividendPart) {
+    private int calculateNumberPosition(int iteration, int dividendPart) {
         int result = 0;
-        if (dividend < 0 && iteration == 0) {
-            result++;
-        }
         if (iteration == 0) {
-            result+=dividendPart.length();
+            result+=getLength(dividendPart);
         } else {
             result++;
         }
         return result;
     }
     
-    private int calculatePrintPosition(String dividendPart, String subtrahend, String modulo) {
+    private int calculatePrintPosition(int dividendPart, int subtrahend, int modulo) {
         int result = 0;
-        if(modulo.equals("0") && subtrahend.equals("0")) {
+        if(modulo == 0 && subtrahend == 0) {
             result++;
         }
-        if(modulo.equals("0") && !subtrahend.equals("0")) {
-            result += subtrahend.length();
+        if(modulo == 0 && subtrahend != 0) {
+            result += getLength(subtrahend);
         }
-        if (!modulo.equals("0") && !subtrahend.equals("0")) {
-            result += dividendPart.length() - modulo.length();
+        if (modulo != 0 && subtrahend != 0) {
+            result += getLength(dividendPart) - getLength(modulo);
         }
         return result;
     }
     
-    private String createLastLine(int printPosition, String dividendPart, String subtrahend, String modulo) {
+    private String createLastLine(int dividendPart, int subtrahend, int modulo, int printPosition) {
         StringBuilder result = new StringBuilder();
-        result.append(repeatChars(' ', printPosition + dividendPart.length() - Integer.toString(Integer.parseInt(dividendPart)-Integer.parseInt(subtrahend)).length()));
+        result.append(repeatChars(' ', printPosition + getLength(dividendPart) - getLength(dividendPart - subtrahend)));
         result.append(modulo);
         return result.toString();
+    }
+    
+    private int getLength(int number) {
+        return String.valueOf(number).length();
+    }
+    
+    private String getString(int number) {
+        return String.valueOf(number);
     }
 }

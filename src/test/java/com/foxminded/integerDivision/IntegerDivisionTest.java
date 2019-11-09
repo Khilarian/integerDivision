@@ -11,68 +11,36 @@ class IntegerDivisionTest {
     
     @Test
     void drawDivisionReturnIllegalArgumentExceptionWhenDividerIsZero() {
-        IntegerDivision id = new IntegerDivision(3,0);
-        assertThrows(IllegalArgumentException.class, () -> id.drawDivision());
+        IntegerDivision id = new IntegerDivision();
+        assertThrows(IllegalArgumentException.class, () -> id.drawDivision(3, 0));
     }   
     
     @Test
     void drawDivisionReturnPositiveResultAfterDivisionTwoPositiveNumbers() {
-        IntegerDivision id = new IntegerDivision(2,1);
+        IntegerDivision id = new IntegerDivision();
         String expected = "_2|1\n"
                 +         " 2|-\n"
                 +         " -|2\n"
                 +         " 0";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(2, 1);
         assertEquals(expected, actual);
     }   
     
-    @Test
-    void drawDivisionReturnNegativeResultAfterDivisionNegativeAndPositiveNumbers() {
-        IntegerDivision id = new IntegerDivision(-2,1);
-        String expected = "_-2|1\n"
-                +         "  2|--\n"
-                +         "  -|-2\n"
-                +         "  0";
-        String actual = id.drawDivision();
-        assertEquals(expected, actual);
-    } 
-    
-    @Test
-    void drawDivisionReturnNegativeResultAfterDivisionPositiveandNegativeNumbers() {
-        IntegerDivision id = new IntegerDivision(2,-1);
-        String expected = "_2|-1\n"
-                +         " 2|--\n"
-                +         " -|-2\n"
-                +         " 0";
-        String actual = id.drawDivision();
-        assertEquals(expected, actual);
-    }  
-    
-    @Test
-    void drawDivisionReturnPositiveResultAfterDivisionTwoNegativeNumbers() {
-        IntegerDivision id = new IntegerDivision(-2,-1);
-        String expected = "_-2|-1\n"
-                +         "  2|--\n"
-                +         "  -|2\n"
-                +         "  0";
-        String actual = id.drawDivision();
-        assertEquals(expected, actual);
-    } 
-    
+   
     @Test
     void drawDivisionReturnZeroWhenFirstNumberIsZero() {
-        IntegerDivision id = new IntegerDivision(0,-1);
-        String expected = "_0|-1\n"
-                +         " 0|--\n"
+        IntegerDivision id = new IntegerDivision();
+        String expected = "_0|987987\n"
+                +         " 0|------\n"
                 +         " -|0\n"
                 +         " 0";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(0, 987987);
         assertEquals(expected, actual);
     } 
     
     @Test
     void drawDivisionReturnNumberWithRemainderOfDivisionWhenTwoInputsNumbersDoNotHaveCommonFactor() {
-        IntegerDivision id = new IntegerDivision(563,4);
+        IntegerDivision id = new IntegerDivision();
         String expected = "_563|4\n"
                 +         " 4  |---\n"
                 +         " -  |140\n"
@@ -83,24 +51,24 @@ class IntegerDivisionTest {
                 +         "   0\n"
                 +         "   -\n"
                 +         "   3";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(563, 4);
         assertEquals(expected, actual);
     } 
     
     @Test
     void drawDivisionReturnZeroWithRemainderOfDivisionWhenDividerGreaterThanDivided() {
-        IntegerDivision id = new IntegerDivision(4,128);
+        IntegerDivision id = new IntegerDivision();
         String expected = "_4|128\n"
                 +         " 0|---\n"
                 +         " -|0\n"
                 +         " 4";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(4, 128);
         assertEquals(expected, actual);
     } 
     
     @Test
     void drawDivisionReturnLotsOfSameNumeralIfDividedContainsOfLotsSameNumeralAndDividedIsOneNumeralThatHaveCommonFactor() {
-        IntegerDivision id = new IntegerDivision(999,3);
+        IntegerDivision id = new IntegerDivision();
         String expected = "_999|3\n"
                 +         " 9  |---\n"
                 +         " -  |333\n"
@@ -111,13 +79,13 @@ class IntegerDivisionTest {
                 +         "   9\n"
                 +         "   -\n"
                 +         "   0";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(999, 3);
         assertEquals(expected, actual);
     } 
     
     @Test
     void drawDivisionReturnNumberWithRemainderOfDivisionWithBigDividedWhenTwoInputsNumbersDoNotHaveCommonFactor() {
-        IntegerDivision id = new IntegerDivision(1892222,9223);
+        IntegerDivision id = new IntegerDivision();
         String expected = "_1892222|9223\n"
                 +         " 18446  |----\n"
                 +         " -----  |205\n"
@@ -128,7 +96,7 @@ class IntegerDivisionTest {
                 +         "   46115\n"
                 +         "   -----\n"
                 +         "    1507";
-        String actual = id.drawDivision();
+        String actual = id.drawDivision(1892222, 9223);
         assertEquals(expected, actual);
     } 
 }
